@@ -64,12 +64,14 @@ public:
         return *this;
     }
 
+    // --- ДОБАВЛЕННЫЕ МЕТОДЫ ДЛЯ ДОСТУПА ИЗВНЕ ---
     int get_degree() const { return size - 1; }
     T get_coef(int i) const
     {
         if (i < 0 || i >= size) return T{};
         return a[i];
     }
+    // --------------------------------------------
 
     T& operator[](int i)
     {
@@ -226,3 +228,31 @@ public:
         return in;
     }
 };
+
+// ==========================================================
+// РЕШЕНИЕ ЗАДАЧ (ВНЕ КЛАССА, СОГЛАСНО ТРЕБОВАНИЯМ)
+// ==========================================================
+
+// Задача 3: Производная многочлена
+template <typename T>
+Polynomial<double> derivative(const Polynomial<T>& p) {
+    int deg = p.get_degree();
+    if (deg == 0) return Polynomial<double>(0);
+
+    Polynomial<double> res(deg - 1);
+    for (int i = 1; i <= deg; ++i) {
+        res.set(i - 1, p.get_coef(i) * i);
+    }
+    res.shrink_to_fit();
+    return res;
+}
+template <typename T>
+Polynomial<double> calculate_integral(const Polynomial<T>& p) {
+    int deg = p.get_degree();
+    Polynomial<double> res(deg + 1);
+    for (int i = 0; i <= deg; ++i) {
+        res.set(i + 1, p.get_coef(i) / (i + 1.0));
+    }
+    res.shrink_to_fit();
+    return res;
+}
