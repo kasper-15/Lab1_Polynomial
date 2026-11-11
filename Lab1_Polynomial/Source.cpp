@@ -256,3 +256,54 @@ Polynomial<double> calculate_integral(const Polynomial<T>& p) {
     res.shrink_to_fit();
     return res;
 }
+int main()
+{
+    std::mt19937 gen(std::random_device{}());
+    std::uniform_real_distribution<double> dist(-5.0, 5.0);
+
+    Polynomial<double> p(3);
+    Polynomial<double> q(2);
+
+    for (int i = 0; i < 4; i++) p.set(i, dist(gen));
+    for (int i = 0; i < 3; i++) q.set(i, dist(gen));
+
+    std::cout << "First polynomial:\n" << p << "\n\n";
+    std::cout << "Second polynomial:\n" << q << "\n\n";
+    std::cout << "Addition:\n" << p + q << "\n\n";
+    std::cout << "Subtraction:\n" << p - q << "\n\n";
+    std::cout << "Multiplication:\n" << p * 2.0 << "\n\n";
+
+    std::cout << "================ РЕШЕНИЕ ЗАДАЧ (ВАРИАНТ 3) ================\n\n";
+
+    std::cout << "3. Производная многочлена p:\n";
+    std::cout << derivative(p) << "\n\n";
+
+    std::cout << "4. Неопределенный интеграл многочлена p:\n";
+    std::cout << calculate_integral(p) << " + C\n\n";
+
+    Polynomial<double> eq(2);
+    eq.set(0, 1.0);
+    eq.set(1, -3.0);
+    eq.set(2, 2.0);
+    std::cout << "Тестовое уравнение 2-й степени: " << eq << " = 0\n";
+
+    double a = eq.get_coef(2), b = eq.get_coef(1), c = eq.get_coef(0);
+
+    double D = b * b - 4 * a * c;
+    if (D > 0) {
+        std::cout << "1,2. Корни (степень 2): x1 = " << (-b + std::sqrt(D)) / (2 * a)
+            << ", x2 = " << (-b - std::sqrt(D)) / (2 * a) << "\n";
+    }
+    else if (D == 0) {
+        std::cout << "1,2. Корень (степень 2): x = " << -b / (2 * a) << "\n";
+    }
+    else {
+        std::cout << "1,2. Действительных корней нет\n";
+    }
+
+    double x_ext = -b / (2 * a);
+    double y_ext = eq(x_ext);
+    std::cout << "5. Координаты экстремума: x = " << x_ext << ", y = " << y_ext << "\n\n";
+
+    return 0;
+}
